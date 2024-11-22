@@ -14,6 +14,7 @@ export interface Config {
     users: User;
     media: Media;
     urls: Url;
+    requests: Request;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -24,6 +25,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     urls: UrlsSelect<false> | UrlsSelect<true>;
+    requests: RequestsSelect<false> | RequestsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -114,6 +116,28 @@ export interface Url {
   id: number;
   url: string;
   status: 'waiting' | 'pending' | 'done' | 'failed';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "requests".
+ */
+export interface Request {
+  id: number;
+  url: string;
+  method: string;
+  header:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  body?: string | null;
+  scrapyUrl: number | Url;
   updatedAt: string;
   createdAt: string;
 }
@@ -218,6 +242,10 @@ export interface PayloadLockedDocument {
         value: number | Url;
       } | null)
     | ({
+        relationTo: 'requests';
+        value: number | Request;
+      } | null)
+    | ({
         relationTo: 'payload-jobs';
         value: number | PayloadJob;
       } | null);
@@ -308,6 +336,19 @@ export interface UrlsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "requests_select".
+ */
+export interface RequestsSelect<T extends boolean = true> {
+  url?: T;
+  method?: T;
+  header?: T;
+  body?: T;
+  scrapyUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
@@ -377,10 +418,23 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface TaskGetWebsiteAllRequest {
   input: {
     url: string;
+    id: number;
   };
   output: {
     data: {
       url: string;
+      method: string;
+      header:
+        | {
+            [k: string]: unknown;
+          }
+        | unknown[]
+        | string
+        | number
+        | boolean
+        | null;
+      body?: string | null;
+      scrapyUrl: number | Url;
     }[];
   };
 }
@@ -392,6 +446,18 @@ export interface TaskSaveWebsiteAllRequest {
   input: {
     data: {
       url: string;
+      method: string;
+      header:
+        | {
+            [k: string]: unknown;
+          }
+        | unknown[]
+        | string
+        | number
+        | boolean
+        | null;
+      body?: string | null;
+      scrapyUrl: number | Url;
     }[];
   };
   output?: unknown;
@@ -403,6 +469,7 @@ export interface TaskSaveWebsiteAllRequest {
 export interface WorkflowScrapyWebsiteRequest {
   input: {
     url: string;
+    id: number;
   };
 }
 /**

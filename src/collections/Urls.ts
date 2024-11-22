@@ -45,6 +45,7 @@ export const Urls: CollectionConfig = {
             workflow: 'scrapyWebsiteRequest',
             input: {
               url: doc.url,
+              id: doc.id,
             },
           })
           req.payload.jobs.run()

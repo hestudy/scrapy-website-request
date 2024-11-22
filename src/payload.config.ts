@@ -9,10 +9,12 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
-import puppteer, { HTTPRequest } from 'puppeteer'
 import { Media } from './collections/Media'
+import { Requests } from './collections/Requests'
 import { Urls } from './collections/Urls'
 import { Users } from './collections/Users'
+import { getWebsiteAllRequest } from './handlers/getWebsiteAllRequest'
+import { saveWebsiteAllRequest } from './handlers/saveWebsiteAllRequest'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Urls],
+  collections: [Users, Media, Urls, Requests],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -57,42 +59,21 @@ export default buildConfig({
             type: 'text',
             required: true,
           },
+          {
+            name: 'id',
+            type: 'number',
+            required: true,
+          },
         ],
         outputSchema: [
           {
             name: 'data',
             type: 'array',
             required: true,
-            fields: [
-              {
-                name: 'url',
-                type: 'text',
-                required: true,
-              },
-            ],
+            fields: Requests.fields,
           },
         ],
-        handler: async ({ input }) => {
-          const pwEndpoint = process.env.BROWSERLESS_ENDPOINT || ''
-          const browser = await puppteer.connect({
-            browserWSEndpoint: pwEndpoint,
-          })
-          const page = await browser.newPage()
-          const data: HTTPRequest[] = []
-          page.on('request', (request) => {
-            data.push(request)
-          })
-          await page.goto(input.url)
-          return {
-            output: {
-              data: data.map((item) => {
-                return {
-                  url: item.url(),
-                }
-              }),
-            },
-          }
-        },
+        handler: getWebsiteAllRequest,
       },
       {
         retries: 3,
@@ -102,21 +83,10 @@ export default buildConfig({
             name: 'data',
             type: 'array',
             required: true,
-            fields: [
-              {
-                name: 'url',
-                type: 'text',
-                required: true,
-              },
-            ],
+            fields: Requests.fields,
           },
         ],
-        handler: async ({ input, req }) => {
-          console.log(input)
-          return {
-            output: {},
-          }
-        },
+        handler: saveWebsiteAllRequest,
       },
     ],
     workflows: [
@@ -128,12 +98,17 @@ export default buildConfig({
             type: 'text',
             required: true,
           },
+          {
+            name: 'id',
+            type: 'number',
+            required: true,
+          },
         ],
         handler: async ({ job, tasks }) => {
-          console.log(job.input)
           const output = await tasks.getWebsiteAllRequest('1', {
             input: {
               url: job.input.url,
+              id: job.input.id,
             },
           })
           await tasks.saveWebsiteAllRequest('2', {
