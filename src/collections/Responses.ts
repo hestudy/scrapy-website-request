@@ -1,15 +1,10 @@
 import { CollectionConfig } from 'payload'
 
-export const Requests: CollectionConfig = {
-  slug: 'requests',
+export const Responses: CollectionConfig = {
+  slug: 'responses',
   fields: [
     {
       name: 'url',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'method',
       type: 'text',
       required: true,
     },
@@ -19,7 +14,7 @@ export const Requests: CollectionConfig = {
       required: true,
     },
     {
-      name: 'body',
+      name: 'data',
       type: 'text',
     },
     {

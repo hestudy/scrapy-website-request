@@ -10,7 +10,7 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
-import { Requests } from './collections/Requests'
+import { Responses } from './collections/Responses'
 import { Urls } from './collections/Urls'
 import { Users } from './collections/Users'
 import { getWebsiteAllRequest } from './handlers/getWebsiteAllRequest'
@@ -26,7 +26,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Urls, Requests],
+  collections: [Users, Media, Urls, Responses],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -70,7 +70,7 @@ export default buildConfig({
             name: 'data',
             type: 'array',
             required: true,
-            fields: Requests.fields,
+            fields: Responses.fields,
           },
         ],
         handler: getWebsiteAllRequest,
@@ -83,7 +83,7 @@ export default buildConfig({
             name: 'data',
             type: 'array',
             required: true,
-            fields: Requests.fields,
+            fields: Responses.fields,
           },
         ],
         handler: saveWebsiteAllRequest,

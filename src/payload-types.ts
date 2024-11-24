@@ -14,7 +14,7 @@ export interface Config {
     users: User;
     media: Media;
     urls: Url;
-    requests: Request;
+    responses: Response;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -25,7 +25,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     urls: UrlsSelect<false> | UrlsSelect<true>;
-    requests: RequestsSelect<false> | RequestsSelect<true>;
+    responses: ResponsesSelect<false> | ResponsesSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -121,12 +121,11 @@ export interface Url {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "requests".
+ * via the `definition` "responses".
  */
-export interface Request {
+export interface Response {
   id: number;
   url: string;
-  method: string;
   header:
     | {
         [k: string]: unknown;
@@ -136,7 +135,7 @@ export interface Request {
     | number
     | boolean
     | null;
-  body?: string | null;
+  data?: string | null;
   scrapyUrl: number | Url;
   updatedAt: string;
   createdAt: string;
@@ -242,8 +241,8 @@ export interface PayloadLockedDocument {
         value: number | Url;
       } | null)
     | ({
-        relationTo: 'requests';
-        value: number | Request;
+        relationTo: 'responses';
+        value: number | Response;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -336,13 +335,12 @@ export interface UrlsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "requests_select".
+ * via the `definition` "responses_select".
  */
-export interface RequestsSelect<T extends boolean = true> {
+export interface ResponsesSelect<T extends boolean = true> {
   url?: T;
-  method?: T;
   header?: T;
-  body?: T;
+  data?: T;
   scrapyUrl?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -423,7 +421,6 @@ export interface TaskGetWebsiteAllRequest {
   output: {
     data: {
       url: string;
-      method: string;
       header:
         | {
             [k: string]: unknown;
@@ -433,7 +430,7 @@ export interface TaskGetWebsiteAllRequest {
         | number
         | boolean
         | null;
-      body?: string | null;
+      data?: string | null;
       scrapyUrl: number | Url;
     }[];
   };
@@ -446,7 +443,6 @@ export interface TaskSaveWebsiteAllRequest {
   input: {
     data: {
       url: string;
-      method: string;
       header:
         | {
             [k: string]: unknown;
@@ -456,7 +452,7 @@ export interface TaskSaveWebsiteAllRequest {
         | number
         | boolean
         | null;
-      body?: string | null;
+      data?: string | null;
       scrapyUrl: number | Url;
     }[];
   };
