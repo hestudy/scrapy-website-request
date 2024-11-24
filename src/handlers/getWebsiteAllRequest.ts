@@ -1,5 +1,5 @@
 import { TaskHandler } from 'payload'
-import puppeteer, { HTTPRequest } from 'puppeteer'
+import puppeteer, { HTTPRequest } from 'puppeteer-core'
 
 export const getWebsiteAllRequest: TaskHandler<'getWebsiteAllRequest'> = async ({ input, req }) => {
   const pwEndpoint = process.env.BROWSERLESS_ENDPOINT || ''
