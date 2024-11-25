@@ -10,7 +10,7 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { Media } from './collections/Media'
-import { Responses } from './collections/Responses'
+import { Responses } from './collections/Requests'
 import { Urls } from './collections/Urls'
 import { Users } from './collections/Users'
 import { getWebsiteAllRequest } from './handlers/getWebsiteAllRequest'
@@ -72,6 +72,11 @@ export default buildConfig({
             required: true,
             fields: Responses.fields,
           },
+          {
+            name: 'id',
+            type: 'number',
+            required: true,
+          },
         ],
         handler: getWebsiteAllRequest,
       },
@@ -84,6 +89,11 @@ export default buildConfig({
             type: 'array',
             required: true,
             fields: Responses.fields,
+          },
+          {
+            name: 'id',
+            type: 'number',
+            required: true,
           },
         ],
         handler: saveWebsiteAllRequest,

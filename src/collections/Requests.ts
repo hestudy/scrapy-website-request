@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload'
 
 export const Responses: CollectionConfig = {
-  slug: 'responses',
+  slug: 'requests',
   fields: [
     {
       name: 'url',
@@ -14,7 +14,7 @@ export const Responses: CollectionConfig = {
       required: true,
     },
     {
-      name: 'data',
+      name: 'body',
       type: 'text',
     },
     {

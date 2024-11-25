@@ -7,12 +7,6 @@ puppeteer.use(StealthPlugin())
 
 test('getWebsiteAllRequest', async () => {
   const browserWSEndpoint = process.env.BROWSERLESS_ENDPOINT || ''
-  //   const launchArgs = JSON.stringify({
-  //     stealth: true,
-  //     headless: true,
-  //     args: [`--window-size=1920,1080`, `--user-data-dir=/tmp/chrome/data-dir`],
-  //     timeout: 5000,
-  //   })
   const browser = await puppeteer.connect({
     browserWSEndpoint,
   })

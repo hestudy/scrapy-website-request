@@ -39,16 +39,21 @@ export const Urls: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      async ({ doc, req }) => {
-        if (doc?.status === 'waiting') {
+      async ({ doc, req, operation }) => {
+        if (operation === 'create') {
           await req.payload.jobs.queue({
             workflow: 'scrapyWebsiteRequest',
             input: {
               url: doc.url,
               id: doc.id,
             },
+            queue: `scrapyWebsite-${doc.id}`,
           })
-          req.payload.jobs.run()
+        }
+        if (doc?.status === 'waiting') {
+          req.payload.jobs.run({
+            queue: `scrapyWebsite-${doc.id}`,
+          })
         }
       },
     ],

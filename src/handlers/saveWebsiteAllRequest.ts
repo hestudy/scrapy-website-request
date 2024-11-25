@@ -6,10 +6,18 @@ export const saveWebsiteAllRequest: TaskHandler<'saveWebsiteAllRequest'> = async
 }) => {
   for await (const item of input.data) {
     await req.payload.create({
-      collection: 'responses',
+      collection: 'requests',
       data: item,
     })
   }
+
+  await req.payload.update({
+    collection: 'urls',
+    id: input.id,
+    data: {
+      status: 'done',
+    },
+  })
 
   return {
     output: {},

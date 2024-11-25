@@ -1,43 +1,54 @@
 import { TaskHandler } from 'payload'
-import puppeteer, { HTTPRequest } from 'puppeteer-core'
+import { HTTPRequest } from 'puppeteer-core'
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+
+puppeteer.use(StealthPlugin())
 
 export const getWebsiteAllRequest: TaskHandler<'getWebsiteAllRequest'> = async ({ input, req }) => {
-  const pwEndpoint = process.env.BROWSERLESS_ENDPOINT || ''
-  const launchArgs = JSON.stringify({ stealth: true, headless: false })
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: `${pwEndpoint}&launch=${launchArgs}`,
-  })
-  const page = await browser.newPage()
-  const data: HTTPRequest[] = []
-  page.on('request', (request) => {
-    data.push(request)
-  })
-  await page.goto(input.url, {
-    waitUntil: 'networkidle0',
-    timeout: 30 * 1000,
-  })
   await req.payload.update({
     collection: 'urls',
     id: input.id,
     data: {
-      status: 'done',
+      status: 'pending',
     },
   })
-  // for await (const item of data) {
-  //   try {
-  //     item.data = await item.text()
-  //   } catch (e) {}
-  // }
-  return {
-    output: {
-      data: data.map((item) => {
-        return {
-          url: item.url(),
-          header: item.headers(),
-          // data: item.data,
-          scrapyUrl: input.id,
-        }
-      }),
-    },
+
+  try {
+    const browserWSEndpoint = process.env.BROWSERLESS_ENDPOINT || ''
+    const browser = await puppeteer.connect({
+      browserWSEndpoint,
+    })
+    const page = await browser.newPage()
+    const data: HTTPRequest[] = []
+    page.on('request', (request: HTTPRequest) => {
+      data.push(request)
+    })
+    await page.goto(input.url, {
+      waitUntil: 'networkidle0',
+      timeout: 60 * 1000,
+    })
+    return {
+      output: {
+        data: data.map((item) => {
+          return {
+            url: item.url(),
+            header: item.headers(),
+            body: item.postData(),
+            scrapyUrl: input.id,
+          }
+        }),
+        id: input.id,
+      },
+    }
+  } catch (e) {
+    await req.payload.update({
+      collection: 'urls',
+      id: input.id,
+      data: {
+        status: 'failed',
+      },
+    })
+    throw e
   }
 }

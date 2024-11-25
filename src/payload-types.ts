@@ -14,7 +14,7 @@ export interface Config {
     users: User;
     media: Media;
     urls: Url;
-    responses: Response;
+    requests: Request;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -25,7 +25,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     urls: UrlsSelect<false> | UrlsSelect<true>;
-    responses: ResponsesSelect<false> | ResponsesSelect<true>;
+    requests: RequestsSelect<false> | RequestsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -121,9 +121,9 @@ export interface Url {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "responses".
+ * via the `definition` "requests".
  */
-export interface Response {
+export interface Request {
   id: number;
   url: string;
   header:
@@ -135,7 +135,7 @@ export interface Response {
     | number
     | boolean
     | null;
-  data?: string | null;
+  body?: string | null;
   scrapyUrl: number | Url;
   updatedAt: string;
   createdAt: string;
@@ -241,8 +241,8 @@ export interface PayloadLockedDocument {
         value: number | Url;
       } | null)
     | ({
-        relationTo: 'responses';
-        value: number | Response;
+        relationTo: 'requests';
+        value: number | Request;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -335,12 +335,12 @@ export interface UrlsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "responses_select".
+ * via the `definition` "requests_select".
  */
-export interface ResponsesSelect<T extends boolean = true> {
+export interface RequestsSelect<T extends boolean = true> {
   url?: T;
   header?: T;
-  data?: T;
+  body?: T;
   scrapyUrl?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -430,9 +430,10 @@ export interface TaskGetWebsiteAllRequest {
         | number
         | boolean
         | null;
-      data?: string | null;
+      body?: string | null;
       scrapyUrl: number | Url;
     }[];
+    id: number;
   };
 }
 /**
@@ -452,9 +453,10 @@ export interface TaskSaveWebsiteAllRequest {
         | number
         | boolean
         | null;
-      data?: string | null;
+      body?: string | null;
       scrapyUrl: number | Url;
     }[];
+    id: number;
   };
   output?: unknown;
 }
