@@ -10,6 +10,7 @@ const requestList = async (id: number) => {
         equals: id,
       },
     },
+    pagination: false,
   })
   return res
 }

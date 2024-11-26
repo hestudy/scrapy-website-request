@@ -3,11 +3,14 @@
 import { useRequest } from 'ahooks'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import createUrl from './actions/createUrl'
 import useScrapyList from '../ScrapyList/hooks/useScrapyList'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import createUrl from './actions/createUrl'
+import { CheckCheck, CircleX, Loader } from 'lucide-react'
 
 const UrlInput = () => {
-  const { run } = useScrapyList()
+  const { run, urlReq } = useScrapyList()
   const saveReq = useRequest(
     async () => {
       if (url) {
@@ -29,22 +32,27 @@ const UrlInput = () => {
 
   return (
     <div className="flex space-x-4">
-      <input
+      <Input
         type="url"
-        className="bg-slate-700 p-2 px-4 rounded"
         placeholder="please input url"
         value={url}
         onChange={(e) => {
           setUrl(e.target.value)
         }}
       />
-      <button
-        className="bg-slate-900 py-2 px-4 rounded"
-        disabled={saveReq.loading}
-        onClick={saveReq.run}
-      >
+      <Button disabled={saveReq.loading} onClick={saveReq.run}>
         Scrapy
-      </button>
+      </Button>
+      {urlReq?.data?.status && (
+        <div className="flex items-center space-x-2 justify-end">
+          <div>{urlReq?.data?.status}</div>
+          {(urlReq.data.status === 'pending' || urlReq.data.status === 'waiting') && (
+            <Loader className="animate-spin text-blue-500" />
+          )}
+          {urlReq.data.status === 'done' && <CheckCheck className="text-green-500" />}
+          {urlReq.data.status === 'failed' && <CircleX className="text-red-500" />}
+        </div>
+      )}
     </div>
   )
 }

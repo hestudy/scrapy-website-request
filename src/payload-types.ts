@@ -125,8 +125,9 @@ export interface Url {
  */
 export interface Request {
   id: number;
+  title?: string | null;
   url: string;
-  header:
+  header?:
     | {
         [k: string]: unknown;
       }
@@ -338,6 +339,7 @@ export interface UrlsSelect<T extends boolean = true> {
  * via the `definition` "requests_select".
  */
 export interface RequestsSelect<T extends boolean = true> {
+  title?: T;
   url?: T;
   header?: T;
   body?: T;
@@ -420,8 +422,9 @@ export interface TaskGetWebsiteAllRequest {
   };
   output: {
     data: {
+      title?: string | null;
       url: string;
-      header:
+      header?:
         | {
             [k: string]: unknown;
           }
@@ -443,8 +446,9 @@ export interface TaskGetWebsiteAllRequest {
 export interface TaskSaveWebsiteAllRequest {
   input: {
     data: {
+      title?: string | null;
       url: string;
-      header:
+      header?:
         | {
             [k: string]: unknown;
           }

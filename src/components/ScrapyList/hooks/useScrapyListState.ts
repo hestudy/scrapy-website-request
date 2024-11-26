@@ -1,11 +1,9 @@
-import { useBoolean, useRequest } from 'ahooks'
-import { useEffect } from 'react'
+import { useRequest } from 'ahooks'
 import { toast } from 'sonner'
 import requestList from '../actions/requestList'
 import urlById from '../actions/urlById'
 
 const useScrapyListState = () => {
-  const [ready, readyAc] = useBoolean(true)
   const urlReq = useRequest(
     async (id: number) => {
       if (id) {
@@ -17,39 +15,34 @@ const useScrapyListState = () => {
       }
     },
     {
-      pollingInterval: 3000,
-      ready,
+      manual: true,
     },
   )
-
-  useEffect(() => {
-    if (urlReq.data?.status) {
-      readyAc.set(urlReq.data?.status === 'pending' || urlReq.data.status === 'waiting')
-    }
-  }, [urlReq.data?.status])
 
   const scrapyReq = useRequest(
     async (id: number) => {
       if (id) {
+        const url = await urlReq.runAsync(id)
         const res = await requestList(id).catch((e: Error) => {
           toast.error(e.message)
           return null
         })
+        if (url?.status === 'done' || url?.status === 'failed') {
+          scrapyReq.cancel()
+        }
         return res
       }
     },
     {
       pollingInterval: 3000,
-      ready,
+      manual: true,
     },
   )
 
   const run = (id: number) => {
     urlReq.mutate(null)
     scrapyReq.mutate(null)
-    urlReq.run(id)
     scrapyReq.run(id)
-    readyAc.set(true)
   }
 
   return {

@@ -4,6 +4,10 @@ export const Responses: CollectionConfig = {
   slug: 'requests',
   fields: [
     {
+      name: 'title',
+      type: 'text',
+    },
+    {
       name: 'url',
       type: 'text',
       required: true,
@@ -11,7 +15,6 @@ export const Responses: CollectionConfig = {
     {
       name: 'header',
       type: 'json',
-      required: true,
     },
     {
       name: 'body',
