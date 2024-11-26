@@ -24,7 +24,12 @@ const MetubeDownloadButton = (props: { item: Request }) => {
   )
 
   return (
-    <Button variant={'ghost'} size={'sm'} disabled={downloadReq.loading} onClick={downloadReq.run}>
+    <Button
+      variant={'ghost'}
+      size={'icon'}
+      disabled={downloadReq.loading}
+      onClick={downloadReq.run}
+    >
       {!downloadReq.loading && <Download />}
       {downloadReq.loading && <Loader className="text-blue-500 animate-spin"></Loader>}
     </Button>

@@ -58,7 +58,7 @@ const ScrapyList = () => {
                   <TableCell className="text-right flex space-x-2">
                     <Button
                       variant={'ghost'}
-                      size={'sm'}
+                      size={'icon'}
                       onClick={() => {
                         copy(item.url).then(() => {
                           toast.success('Copied to clipboard')
