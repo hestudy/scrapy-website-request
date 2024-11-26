@@ -22,6 +22,7 @@
     "@payloadcms/payload-cloud": "latest",
     "@payloadcms/richtext-lexical": "latest",
     "@payloadcms/translations": "^3.0.2",
+    "ahooks": "^3.8.1",
     "cross-env": "^7.0.3",
     "graphql": "^16.8.1",
     "next": "15.0.0",
@@ -31,7 +32,8 @@
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react": "19.0.0-rc-65a56d0e-20241020",
     "react-dom": "19.0.0-rc-65a56d0e-20241020",
-    "sharp": "0.32.6"
+    "sharp": "0.32.6",
+    "sonner": "^1.7.0"
   },
   "devDependencies": {
     "@types/node": "^22.5.4",

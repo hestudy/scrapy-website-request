@@ -115,7 +115,7 @@ export interface Media {
 export interface Url {
   id: number;
   url: string;
-  status: 'waiting' | 'pending' | 'done' | 'failed';
+  status?: ('waiting' | 'pending' | 'done' | 'failed') | null;
   updatedAt: string;
   createdAt: string;
 }

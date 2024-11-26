@@ -15,7 +15,6 @@ export const Urls: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      required: true,
       defaultValue: 'waiting',
       options: [
         {
