@@ -1,6 +1,10 @@
+import { ModeToggle } from '@/components/ModeToggle'
+import Nav from '@/components/Nav'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import React, { PropsWithChildren } from 'react'
+import '@/global.css'
+import '@fontsource/roboto'
+import React from 'react'
 import { Toaster } from 'sonner'
 
 export const metadata = {
@@ -19,7 +23,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <div className="h-[50px] flex justify-end items-center space-x-2 px-2">
+              <Nav></Nav>
+              <ModeToggle></ModeToggle>
+            </div>
+            <div className="w-full h-[calc(100vh-50px)]">{children}</div>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -31,7 +31,7 @@ const UrlInput = () => {
   const [url, setUrl] = useState('')
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-4 w-[500px] mx-auto">
       <Input
         type="url"
         placeholder="please input url"

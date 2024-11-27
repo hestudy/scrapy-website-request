@@ -7,15 +7,7 @@ import { toast } from 'sonner'
 import MetubeDownloadButton from '../MetubeDownloadButton'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import useScrapyList from './hooks/useScrapyList'
 
@@ -26,17 +18,19 @@ const ScrapyList = () => {
   const filter = scrapyReq?.data?.docs.filter((item) => item.url.includes(input))
 
   return (
-    <div className="mt-2 space-y-2">
-      <Input
-        placeholder="search url"
-        value={input}
-        onChange={(e) => {
-          setInput(e.target.value)
-        }}
-      ></Input>
+    <div className="mt-10 space-y-2 w-[1000px] mx-auto">
+      <div className="flex justify-end">
+        <Input
+          className="w-[300px]"
+          placeholder="search url"
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value)
+          }}
+        ></Input>
+      </div>
       <div className="max-w-[1000px] max-h-[500px] overflow-auto">
         <Table>
-          <TableCaption>Request List</TableCaption>
           <TableHeader className="sticky top-0">
             <TableRow>
               <TableHead>Title</TableHead>
